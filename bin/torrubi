@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+require 'torrubi'
+
+if ARGV.length > 0
+  host, port = ARGV[0].split(":")
+  Torrubi::Console.new(host, port).run
+else
+  Torrubi::Console.new.run
+end

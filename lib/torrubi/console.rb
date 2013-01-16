@@ -53,6 +53,7 @@ module Torrubi
         begin
           @torrentClient.add(magnet)
           puts "Torrent added"
+          puts magnet
         rescue Exception => e  
           puts e.message 
         end
@@ -81,5 +82,21 @@ module Torrubi
     end
     
   end
+
+  class RtorrentConsole < Console
   
+    def perform_operation_on_selected
+      if @selected > 0 and @selected < @results.length
+        magnet = @results[@selected - 1].magnetLink
+        begin
+          system 'rtorrent #{magnet}'
+        rescue Exception => e  
+          puts e.message 
+        end
+      else
+        puts "Invalid torrent number"
+        exit 0
+      end
+    end
+  end
 end

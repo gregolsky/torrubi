@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'torrubi'
+
+Torrubi::RtorrentConsole.new.run

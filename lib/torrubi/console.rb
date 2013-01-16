@@ -30,7 +30,7 @@ module Torrubi
     def print_search_results
       if @results.length > 0
         @results[0..9].each_with_index do |t, i|
-          puts "#{i + 1}.\t#{t.name}\t#{t.seedCount}\t#{t.leechCount}\n\t#{t.desc}"
+          puts "#{i + 1}.\t#{t.name}\n\tS: #{t.seedCount}\tL: #{t.leechCount}\tSize: #{t.size}\tBy: #{t.uploadedBy}"
         end
       else
         puts 'No results found'

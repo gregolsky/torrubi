@@ -6,7 +6,7 @@
    s.version     = Torrubi::VERSION
    s.authors     = ["Grzegorz Lachowski"]
    s.email       = ["gregory.lachowski@gmail.com"]
-   s.homepage    = ""
+   s.homepage    = "https://github.com/gregorl/torrubi"
    s.summary     = %q{Simple torrent management utility}
    s.description = %q{Simple torrent management utility}
 
@@ -17,6 +17,6 @@
    s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
    s.require_paths = ["lib"]
 
-   s.add_dependency('nokogiri')
+   s.add_dependency('hpricot')
    s.add_dependency('transmission-rpc')
  end

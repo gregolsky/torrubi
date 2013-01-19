@@ -1,14 +1,14 @@
 
 require_relative 'piratebay'
-require_relative 'transmission'
+require_relative 'torrent-client'
 
 module Torrubi
 
   class Console
 
-    def initialize(host = "127.0.0.1", port = 9091)
-      @searchClient = PirateBay::Client.new
-      @torrentClient = TransmissionRpc::Client.new(host, port)
+    def initialize(searchClient, torrentClient)
+      @searchClient = searchClient
+      @torrentClient = torrentClient
       @results = nil
       @selected = nil
     end
@@ -44,7 +44,12 @@ module Torrubi
     end
     
     def perform_search(term)
-      @results = @searchClient.search(term)
+      begin
+        @results = @searchClient.search(term)
+      rescue
+        puts 'Search error. Try again later.'
+        exit 0
+      end
     end
     
     def perform_operation_on_selected
@@ -53,7 +58,6 @@ module Torrubi
         begin
           @torrentClient.add(magnet)
           puts "Torrent added"
-          puts magnet
         rescue Exception => e  
           puts e.message 
         end
@@ -65,38 +69,21 @@ module Torrubi
 
   end
   
-  class TvShowsConsole < Console
-    
-    protected
-    
-    def get_search_term
-      printf "Search title: "
-      title =  STDIN.gets.chomp
-      printf "Season nr: "
-      snr = STDIN.gets.chomp      
-      printf "Episode nr: "
-      epnr = STDIN.gets.chomp
-      epnr = "0#{epnr}" unless epnr.length != 1
-      snr = "0#{epnr}" unless snr.length != 1
-      "#{title} S#{snr}E#{epnr}"
+  class TransmissionDaemonConsole < Console
+
+    def initialize
+      @cfg = TransmissionDaemonConfig.new
+      super(PirateBay::Client.new, TorrentClient::TransmissionDaemon.new(@cfg.host, @cfg.port))
     end
     
   end
 
   class RtorrentConsole < Console
   
-    def perform_operation_on_selected
-      if @selected > 0 and @selected < @results.length
-        magnet = @results[@selected - 1].magnetLink
-        begin
-          system 'rtorrent #{magnet}'
-        rescue Exception => e  
-          puts e.message 
-        end
-      else
-        puts "Invalid torrent number"
-        exit 0
-      end
+    def initialize
+      @cfg = RtorrentConfig.new
+      super(PirateBay::Client.new, TorrentClient::Rtorrent.new(@cfg.watch_directory))    
     end
+    
   end
 end

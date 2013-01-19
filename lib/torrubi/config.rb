@@ -10,10 +10,14 @@ module Torrubi
     end
 
     def initialize
-      @cfg = YAML.load_file(self.full_path)
+      begin
+        @cfg = YAML.load_file(self.full_path)
+      rescue
+        self.create
+      end
     end
     
-    private
+    protected
     
     def get(subsection, key)
       if not @cfg
@@ -24,22 +28,23 @@ module Torrubi
         @cfg['config'][subsection][key]
       rescue
         puts 'Configuration error'
+        puts @cfg.inspect
         self.create
       end
     end
     
     def create
-      cfg = [
-        'config' => [
-          'rtorrent' => [
+      cfg = {
+        'config' => {
+          'rtorrent' => {
             'watch_directory' => '~/download/watch'
-          ]
-          'transmission-daemon' => [
+          },
+          'transmission-daemon' => {
             'host' => '127.0.0.1',
             'port' => 9091    
-          ]
-        ]
-      ]
+          }
+        }
+      }
       
       File.open(self.full_path, 'w') { |f| f.write(YAML.dump(cfg)) }
       puts 'Setup your ~/.torrubi file and run again'

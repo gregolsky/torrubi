@@ -35,7 +35,7 @@ module TorrentClient
     end
     
     def add(magnet)
-      fpath = File.join(@watch_directory, self.file_name_from_magnet(magnet))
+      fpath = File.join(File.expand_path(@watch_directory), self.file_name_from_magnet(magnet))
       File.open(fpath, 'w') { |f| f.write(self.file_content_from_magnet(magnet)) }
     end
   

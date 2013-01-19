@@ -1,5 +1,6 @@
 
 require_relative 'piratebay'
+require_relative 'config'
 require_relative 'torrent-client'
 
 module Torrubi

@@ -71,7 +71,7 @@ module Torrubi
     
     def perform_operation_on_selected
       sel = @selected.to_i - 1
-      if sel < @results.length
+      if sel.between?(0, @results.length)
         magnet = @results[sel].magnetLink
         begin
           @torrentClient.add(magnet)

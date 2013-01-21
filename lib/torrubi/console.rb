@@ -56,7 +56,7 @@ module Torrubi
     end
 
     def select_result
-      printf "Add to queue (enter number or '>' for next page): "
+      printf "Add to queue (number or ENTER for next page): "
       @selected = STDIN.gets.chomp.downcase
     end
     

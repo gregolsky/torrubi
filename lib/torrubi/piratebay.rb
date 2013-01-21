@@ -9,9 +9,9 @@ module PirateBay
 
     @@url = 'http://thepiratebay.se'
 
-    def search(term)
+    def search(term, page = 0)
       encodedTerm = URI::encode(term)
-      searchUrl = "#{@@url}/search/#{encodedTerm}/0/7/0"
+      searchUrl = "#{@@url}/search/#{encodedTerm}/#{page}/7/0"
       webPage = WebPage.new(searchUrl)
       torrents = webPage.search('table#searchResult tr')
         .map { |r| Torrent.from_table_row(r) unless r.at('a.detLink') == nil }

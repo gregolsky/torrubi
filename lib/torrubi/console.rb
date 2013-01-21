@@ -15,9 +15,25 @@ module Torrubi
     end
 
     def run
-      self.perform_search(get_search_term)
-      self.print_search_results
-      self.select_result
+      pageNr = 0
+      term = get_search_term
+      begin
+        while @selected.to_i == 0
+
+          self.perform_search(term, pageNr)
+          self.print_search_results
+          self.select_result
+          
+          if @selected.include?(">")
+            pageNr += 1
+          end
+          
+        end
+      rescue Interrupt
+        puts "Good bye!"
+        exit 0
+      end
+      
       self.perform_operation_on_selected
     end
 
@@ -30,7 +46,7 @@ module Torrubi
 
     def print_search_results
       if @results.length > 0
-        @results[0..9].each_with_index do |t, i|
+        @results.each_with_index do |t, i|
           puts "#{i + 1}.\t#{t.name}\n\tS: #{t.seedCount}\tL: #{t.leechCount}\tSize: #{t.size}\tBy: #{t.uploadedBy}"
         end
       else
@@ -40,13 +56,13 @@ module Torrubi
     end
 
     def select_result
-      printf "Add to queue (enter number): "
-      @selected = STDIN.gets.chomp.to_i
+      printf "Add to queue (enter number or '>' for next page): "
+      @selected = STDIN.gets.chomp.downcase
     end
     
-    def perform_search(term)
+    def perform_search(term, page)
       begin
-        @results = @searchClient.search(term)
+        @results = @searchClient.search(term, page)
       rescue
         puts 'Search error. Try again later.'
         exit 0
@@ -54,8 +70,9 @@ module Torrubi
     end
     
     def perform_operation_on_selected
-      if @selected > 0 and @selected < @results.length
-        magnet = @results[@selected - 1].magnetLink
+      selTorrent = @selected.to_i
+      if selTorrent > 0 and selTorrent < @results.length
+        magnet = @results[selTorrent - 1].magnetLink
         begin
           @torrentClient.add(magnet)
           puts "Torrent added"

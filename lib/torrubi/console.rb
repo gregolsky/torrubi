@@ -12,22 +12,21 @@ module Torrubi
       @torrentClient = torrentClient
       @results = nil
       @selected = nil
+      @pageNr = 0
+      @term = nil
     end
 
     def run
-      pageNr = 0
-      term = get_search_term
+      get_search_term
       begin
         while @selected.to_i == 0
 
-          self.perform_search(term, pageNr)
+          self.perform_search
           self.print_search_results
           self.select_result
-          
-          if @selected.include?(">")
-            pageNr += 1
-          end
-          
+
+          @pageNr += 1
+
         end
       rescue Interrupt
         puts "Good bye!"
@@ -41,13 +40,14 @@ module Torrubi
   
     def get_search_term
       printf "Search: "
-      STDIN.gets.chomp
+      @term = STDIN.gets.chomp
     end
 
     def print_search_results
       if @results.length > 0
         @results.each_with_index do |t, i|
-          puts "#{i + 1}.\t#{t.name}\n\tS: #{t.seedCount}\tL: #{t.leechCount}\tSize: #{t.size}\tBy: #{t.uploadedBy}"
+          nr = @pageNr * (@results.length - 1) + 1
+          puts "#{nr}.\t#{t.name}\n\tS: #{t.seedCount}\tL: #{t.leechCount}\tSize: #{t.size}\tBy: #{t.uploadedBy}"
         end
       else
         puts 'No results found'
@@ -56,13 +56,13 @@ module Torrubi
     end
 
     def select_result
-      printf "Add to queue (enter number or '>' for next page): "
+      printf "Add to queue (number or ENTER for next page): "
       @selected = STDIN.gets.chomp.downcase
     end
     
-    def perform_search(term, page)
+    def perform_search
       begin
-        @results = @searchClient.search(term, page)
+        @results = @searchClient.search(@term, @pageNr)
       rescue
         puts 'Search error. Try again later.'
         exit 0

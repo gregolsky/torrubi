@@ -45,9 +45,10 @@ module Torrubi
 
     def print_search_results
       if @results.length > 0
+        nr = @pageNr * (@results.length) + 1
         @results.each_with_index do |t, i|
-          nr = @pageNr * (@results.length - 1) + 1
-          puts "#{nr}.\t#{t.name}\n\tS: #{t.seedCount}\tL: #{t.leechCount}\tSize: #{t.size}\tBy: #{t.uploadedBy}"
+          
+          puts "#{nr + i}.\t#{t.name}\n\tS: #{t.seedCount}\tL: #{t.leechCount}\tSize: #{t.size}\tBy: #{t.uploadedBy}"
         end
       else
         puts 'No results found'

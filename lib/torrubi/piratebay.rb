@@ -1,7 +1,6 @@
 
-require 'rubygems'
 require 'open-uri'
-require 'hpricot'
+require 'nokogiri'
 
 module PirateBay
 
@@ -36,13 +35,13 @@ module PirateBay
       name = row.at('a.detLink').inner_html.chomp
       magnetLink = row.at('a[@title="Download this torrent using magnet"]')['href'].chomp
       
-      desc, uploadedBy = row.at('font.detDesc').children.map { |ch|
-        if ch.is_a?(Hpricot::Text)
+      desc, uploadedBy = row.at('font.detDesc').children.map do |ch|
+        if WebPageNode.is_text?(ch)
           ch.to_s
         else
           ch.children.first.to_s
         end
-      }
+      end
       
       parsedDesc = desc.scan(/Size ([0-9.]*.[A-Za-z]*),/)
       size = parsedDesc[0][0]
@@ -61,13 +60,17 @@ module PirateBay
     end
 
     def search(selector)
-      @node.search(selector)
+      @node.css(selector)
+    end
+    
+    def WebPageNode.is_text?(node)
+      return node.is_a? Nokogiri::XML::Text
     end
   end
 
   class WebPage < WebPageNode
     def initialize(url)
-      doc = Hpricot(open(url))
+      doc = Nokogiri::HTML(open(url))
       super(doc)
       @url = url
     end

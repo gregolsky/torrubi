@@ -7,5 +7,5 @@ end
 
 task :profile do
   require 'profile'
-  ruby "bin/torrubi-transmission"
+  ruby "-Ilib bin/torrubi-transmission"
 end

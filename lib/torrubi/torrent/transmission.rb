@@ -3,10 +3,10 @@ require 'transmission-rpc'
 module TorrentClient
   class TransmissionDaemon
     
-    def initialize(host, port)
+    def initialize(config)
       Transmission::configure do |cfg|
-        cfg.ip = host
-        cfg.port = port  
+        cfg.ip = config.host
+        cfg.port = config.port  
       end
     end
     

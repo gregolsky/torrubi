@@ -2,7 +2,11 @@
 task :default => [:test]
 
 task :test do
-    ruby "test/*.rb"
+    ruby "-Ilib test/*.rb"
+end
+
+task :run do
+    ruby "-Ilib bin/torrubi"
 end
 
 task :profile do

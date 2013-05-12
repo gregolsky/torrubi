@@ -1,6 +1,6 @@
 
 require 'test/unit'
-require_relative '../lib/torrubi/piratebay'
+require 'torrubi/search/piratebay'
 
 class PirateBayApiUnitTests < Test::Unit::TestCase
 

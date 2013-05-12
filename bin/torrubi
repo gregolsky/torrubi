@@ -2,4 +2,4 @@
 
 require 'torrubi'
 
-Torrubi::RtorrentConsole.new.run
+Torrubi::Program.new.run

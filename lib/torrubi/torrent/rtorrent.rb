@@ -1,13 +1,11 @@
-require 'transmission-rpc'
-
 module TorrentClient  
 
   class Rtorrent
   
     @@magnetRegex = /xt=urn:btih:([^&\/]+)/
   
-    def initialize(watch_directory)
-      @watch_directory = watch_directory
+    def initialize(cfg)
+      @watch_directory = cfg.watch_directory
     end
     
     def file_name_from_magnet(magnet)

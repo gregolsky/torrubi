@@ -1,7 +1,6 @@
 
 require_relative 'piratebay'
 require_relative 'config'
-require_relative 'torrent-client'
 
 module Torrubi
 
@@ -18,22 +17,22 @@ module Torrubi
 
     def run
       get_search_term
-      begin
-        while @selected.to_i == 0
 
-          self.perform_search
-          self.print_search_results
-          self.select_result
+      while @selected.to_i == 0
 
-          @pageNr += 1
+        self.perform_search
+        self.print_search_results
+        self.select_result
 
-        end
-      rescue Interrupt
-        puts "Good bye!"
-        exit 0
+        @pageNr += 1
+
       end
       
       self.perform_operation_on_selected
+      
+    rescue Interrupt
+      puts "Good bye!"
+      exit 0    
     end
 
   protected
@@ -62,24 +61,18 @@ module Torrubi
     end
     
     def perform_search
-      begin
-        @results = @searchClient.search(@term, @pageNr)
-      rescue
-        puts 'Search error. Try again later.'
-        exit 0
-      end
+      @results = @searchClient.search(@term, @pageNr)
+    rescue
+      puts 'Search error. Try again later.'
+      exit 0
     end
     
     def perform_operation_on_selected
       sel = @selected.to_i - 1
       if sel.between?(0, @results.length)
         magnet = @results[sel].magnetLink
-        begin
-          @torrentClient.add(magnet)
-          puts "Torrent added"
-        rescue Exception => e  
-          puts e.message 
-        end
+        @torrentClient.add(magnet)
+        puts "Torrent added"
       else
         puts "Invalid torrent number"
         exit 0
@@ -91,6 +84,7 @@ module Torrubi
   class TransmissionDaemonConsole < Console
 
     def initialize
+      require_relative 'torrent/transmission'
       @cfg = TransmissionDaemonConfig.new
       super(PirateBay::Client.new, TorrentClient::TransmissionDaemon.new(@cfg.host, @cfg.port))
     end
@@ -100,6 +94,7 @@ module Torrubi
   class RtorrentConsole < Console
   
     def initialize
+      require_relative 'torrent/rtorrent'
       @cfg = RtorrentConfig.new
       super(PirateBay::Client.new, TorrentClient::Rtorrent.new(@cfg.watch_directory))    
     end

@@ -14,6 +14,7 @@ class PirateBayApiUnitTests < Test::Unit::TestCase
     result = cli.search('ubuntu')
     assert result != nil
     assert result.length > 0
+
     item = result[0]
     assert item.size != nil and item.size.length > 0
     assert item.uploadedBy != nil and item.uploadedBy.length > 0

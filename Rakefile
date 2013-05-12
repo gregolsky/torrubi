@@ -5,6 +5,7 @@ task :test do
     ruby "test/*.rb"
 end
 
-task :transmission do
+task :profile do
+  require 'profile'
   ruby "bin/torrubi-transmission"
 end

@@ -34,7 +34,6 @@ module Torrubi
       def select_result(results, term, page)
         printf "Add to queue (number or ENTER for next page): "
         selected = STDIN.gets.chomp.downcase.to_i - 1
-        puts "#{selected} asdasdas"
         if selected.between?(0, results.length)
           magnet = results[selected].magnetLink
           puts "Torrent added"

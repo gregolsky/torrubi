@@ -9,6 +9,7 @@ module PirateBay
     @@url = 'http://thepiratebay.se'
 
     def search(term, page = 0)
+      puts page.to_s + 'asdasd'
       encodedTerm = URI::encode(term)
       searchUrl = "#{@@url}/search/#{encodedTerm}/#{page}/7/0"
       webPage = WebPage.new(searchUrl)

@@ -1,4 +1,3 @@
-require 'torrubi/console'
 require 'torrubi/infrastructure'
 
 module Torrubi
@@ -32,7 +31,7 @@ module Torrubi
     class SearchRequestedEventHandler
       def handle(event)
         results = PirateBay::Client.new.search(event.term, event.page)
-        Infrastructure::SyncEventPublisher.instance.publish(Events::SearchCompleted.new(results, event.page))
+        Infrastructure::SyncEventPublisher.instance.publish(Events::SearchCompleted.new(results, event.term, event.page))
       rescue Exception => exc
         Infrastructure::SyncEventPublisher.instance.publish(Events::SearchError.new(exc))
       end
@@ -47,6 +46,7 @@ module Torrubi
     
     class SearchErrorEventHandler
       def handle(event)
+        raise event.exception
         Infrastructure::UI.instance.report_search_error(event.exception.message)
       end
     end

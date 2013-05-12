@@ -1,7 +1,7 @@
 
 require 'torrubi/config'
 require 'torrubi/infrastructure'
-require 'torrubi/console'
+require 'torrubi/ui/console'
 require 'torrubi/events'
 require 'torrubi/handlers'
 

@@ -11,5 +11,5 @@ end
 
 task :profile do
   require 'profile'
-  ruby "-Ilib bin/torrubi-transmission"
+  ruby "-Ilib bin/torrubi"
 end

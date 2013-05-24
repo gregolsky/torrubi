@@ -28,7 +28,7 @@ module Torrubi
             @messenger.write "#{nr + i}.\t#{t.name}\n\tS: #{t.seed_count}\tL: #{t.leech_count}\tSize: #{t.size}\tBy: #{t.uploaded_by}\n"
           end
         else
-          @messenger.write 'No results found\n'
+          @messenger.write "No results found\n"
           exit 0
         end
       end
@@ -52,8 +52,8 @@ module Torrubi
       end
       
       def report_search_error(error_message = nil)
-        @messenger.write 'Search error. Try again later.\n'
-        @messenger.write '#{error_message}\n'
+        @messenger.write "Search error. Try again later.\n"
+        @messenger.write "#{error_message}\n"
         exit 0
       end
       

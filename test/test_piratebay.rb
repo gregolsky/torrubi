@@ -9,7 +9,7 @@ class PirateBayApiUnitTests < Test::Unit::TestCase
     assert page.search('table') != nil
   end
   
-  def test_client
+  def test_client_multiple_results
     cli = PirateBay::Client.new
     result = cli.search('ubuntu')
     assert result != nil
@@ -19,6 +19,13 @@ class PirateBayApiUnitTests < Test::Unit::TestCase
     assert item.size != nil and item.size.length > 0
     assert item.uploadedBy != nil and item.uploadedBy.length > 0
     assert (not item.name.include? "<")
+  end
+  
+  def test_no_results
+    cli = PirateBay::Client.new
+    result = cli.search('asodifjsdfiojsodifjasdiofjasdof')
+    assert !result.nil?
+    assert result.length == 0
   end
 
 end

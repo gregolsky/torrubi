@@ -14,8 +14,13 @@ module PirateBay
       webPage = WebPage.new(searchUrl)
       torrents = webPage.search('table#searchResult tr')
         .map { |r| Torrent.from_table_row(r) unless r.at('a.detLink') == nil }
-        .select { |t| t != nil } 
+        .select { |t| t != nil }
+    rescue
+      raise SearchError, "An error occurred while searching"
     end
+  end
+  
+  class SearchError < Exception
   end
 
   class Torrent

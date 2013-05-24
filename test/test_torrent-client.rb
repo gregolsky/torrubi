@@ -1,6 +1,6 @@
 
 require 'test/unit'
-require_relative '../lib/torrubi/torrent-client'
+require 'torrubi/torrent/rtorrent'
 
 class TorrentClientTests < Test::Unit::TestCase
 

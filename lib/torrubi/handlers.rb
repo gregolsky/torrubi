@@ -9,7 +9,7 @@ module Torrubi
         require 'torrubi/torrent/rtorrent'
         cfg = Configuration::RtorrentConfig.new
         client = TorrentClient::Rtorrent.new(cfg)
-        client.add(event.magnetLink)
+        client.add(event.magnet_link)
       end
     end
     
@@ -18,7 +18,7 @@ module Torrubi
         require 'torrubi/torrent/transmission'
         cfg = Configuration::TransmissionDaemonConfig.new
         client = TorrentClient::TransmissionDaemon.new(cfg)
-        client.add(event.magnetLink)
+        client.add(event.magnet_link)
       end
     end
     

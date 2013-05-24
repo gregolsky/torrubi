@@ -21,12 +21,12 @@ module Infrastructure
       @message_bus = nil
     end
     
-    def subscribe(eventType, handler)
-      if not @handlers.has_key?(eventType)
-        @handlers[eventType] = []
+    def subscribe(event_type, handler)
+      if not @handlers.has_key?(event_type)
+        @handlers[event_type] = []
       end
       
-      @handlers[eventType] << handler
+      @handlers[event_type] << handler
     end
     
     def publish(event)

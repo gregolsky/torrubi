@@ -2,10 +2,10 @@ module Torrubi
   module Events
 
     class TorrentSearchResultSelected
-      attr_reader :magnetLink
+      attr_reader :magnet_link
     
-      def initialize(magnetLink)
-        @magnetLink = magnetLink
+      def initialize(magnet_link)
+        @magnet_link = magnet_link
       end
     end
     

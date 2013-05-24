@@ -26,18 +26,18 @@ class ConsoleTests < Test::Unit::TestCase
   def test_publish_torrent_selected_when_valid_torrent_selected
     @fake_messenger.read_messages << "2"
     @console.select_result(
-      [ Mock.new({ :magnetLink => lambda { || 1 } }) ] * 3, 
+      [ Mock.new({ :magnet_link => lambda { || 1 } }) ] * 3, 
       'test', 
       1)
     e = @fake_publisher.events.pop
     e.is_a? Torrubi::Events::TorrentSearchResultSelected
-    assert !(e.magnetLink.nil?)
+    assert !(e.magnet_link.nil?)
   end
   
   def test_publish_torrent_selected_when_next_page_is_selected
     @fake_messenger.read_messages << "\n"
     @console.select_result(
-      [ Mock.new({ :magnetLink => lambda { || 1 } }) ] * 30, 
+      [ Mock.new({ :magnet_link => lambda { || 1 } }) ] * 30, 
       'test', 
       1)
     e = @fake_publisher.events.pop
@@ -84,11 +84,14 @@ class ConsoleTests < Test::Unit::TestCase
     end
     
     def method_missing(name, *args, &block)
-      if args.nil? or args.length == 0
-        @properties[name.intern].call
-      else
-        @properties[name.intern].call(args)
-      end
+        if args.nil? or args.length == 0
+          @properties[name.intern].call
+        else
+          @properties[name.intern].call(args)
+        end
+      rescue NoMethodError => nme
+        raise "#{name} not registered in mock"
+      
     end
     
   end

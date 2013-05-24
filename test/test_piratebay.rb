@@ -17,7 +17,7 @@ class PirateBayApiUnitTests < Test::Unit::TestCase
 
     item = result[0]
     assert item.size != nil and item.size.length > 0
-    assert item.uploadedBy != nil and item.uploadedBy.length > 0
+    assert item.uploaded_by != nil and item.uploaded_by.length > 0
     assert !(item.name.include? "<")
   end
   

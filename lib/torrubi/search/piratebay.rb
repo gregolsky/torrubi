@@ -9,10 +9,10 @@ module PirateBay
     @@url = 'http://thepiratebay.se'
 
     def search(term, page = 0)
-      encodedTerm = URI::Parser.new.escape(term)
-      searchUrl = "#{@@url}/search/#{encodedTerm}/#{page}/7/0"
-      webPage = WebPage.new(searchUrl)
-      webPage.search('table#searchResult tr')
+      encoded_term = URI::Parser.new.escape(term)
+      search_url = "#{@@url}/search/#{encoded_term}/#{page}/7/0"
+      web_page = WebPage.new(search_url)
+      web_page.search('table#searchResult tr')
         .map { |r| Torrent.from_table_row(r) unless r.at('a.detLink') == nil }
         .select { |t| t != nil }
     rescue
@@ -25,22 +25,22 @@ module PirateBay
 
   class Torrent
 
-    attr_reader :name, :magnetLink, :desc, :seedCount, :leechCount, :size, :uploadedBy
+    attr_reader :name, :magnet_link, :desc, :seed_count, :leech_count, :size, :uploaded_by
 
-    def initialize(name, magnetLink, size, seedCount, leechCount, uploadedBy)
+    def initialize(name, magnet_link, size, seed_count, leech_count, uploaded_by)
       @name = name
-      @magnetLink = magnetLink
-      @seedCount = seedCount
-      @leechCount = leechCount
+      @magnet_link = magnet_link
+      @seed_count = seed_count
+      @leech_count = leech_count
       @size = size
-      @uploadedBy = uploadedBy
+      @uploaded_by = uploaded_by
     end
 
     def Torrent.from_table_row(row)
       name = row.at('a.detLink').inner_html.chomp
-      magnetLink = row.at('a[@title="Download this torrent using magnet"]')['href'].chomp
+      magnet_link = row.at('a[@title="Download this torrent using magnet"]')['href'].chomp
       
-      desc, uploadedBy = row.at('font.detDesc').children.map do |ch|
+      desc, uploaded_by = row.at('font.detDesc').children.map do |ch|
         if WebPageNode.is_text?(ch)
           ch.to_s
         else
@@ -51,10 +51,10 @@ module PirateBay
       parsedDesc = desc.scan(/Size ([0-9.]*.[A-Za-z]*),/)
       size = parsedDesc[0][0]
       
-      seedCount = row.search('td')[2].inner_html.chomp.to_i
-      leechCount = row.search('td')[3].inner_html.chomp.to_i
+      seed_count = row.search('td')[2].inner_html.chomp.to_i
+      leech_count = row.search('td')[3].inner_html.chomp.to_i
 
-      Torrent.new(name, magnetLink, size, seedCount, leechCount, uploadedBy)
+      Torrent.new(name, magnet_link, size, seed_count, leech_count, uploaded_by)
     end
     
   end

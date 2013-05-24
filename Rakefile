@@ -2,7 +2,13 @@
 task :default => [:test]
 
 task :test do
-    ruby "-Ilib test/*.rb"
+  require 'rake/testtask'
+  Rake::TestTask.new do |t|
+    t.libs = ["lib"]
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList['test/test_*.rb']
+  end
 end
 
 task :run do

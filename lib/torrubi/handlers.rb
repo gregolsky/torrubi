@@ -46,7 +46,6 @@ module Torrubi
     
     class SearchErrorEventHandler
       def handle(event)
-        raise event.exception
         Infrastructure::UI.instance.report_search_error(event.exception.message)
       end
     end

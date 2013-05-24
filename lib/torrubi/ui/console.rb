@@ -9,8 +9,8 @@ module Torrubi
     class Console
     
       def initialize(event_publisher = nil, messenger = nil)
-        @eventPublisher = Infrastructure::SyncEventPublisher.instance
-        @messenger = ConsoleMessenger.new
+        @eventPublisher = event_publisher.nil? ? Infrastructure::SyncEventPublisher.instance : event_publisher
+        @messenger = messenger.nil? ? ConsoleMessenger.new : messenger
       end
 
       def ask_for_search_term
@@ -49,12 +49,6 @@ module Torrubi
         else
           @messenger.write "Invalid torrent number\n"
         end
-      end
-      
-      def perform_search
-        @results = @searchClient.search(@term, @pageNr)
-      rescue SearchError => se
-        @eventPublisher.publish(Events::SearchError.new(se))
       end
       
       def report_search_error(error_message = nil)

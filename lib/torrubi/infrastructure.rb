@@ -1,5 +1,3 @@
-require 'torrubi/ui/console'
-
 module Infrastructure
 
   class UI

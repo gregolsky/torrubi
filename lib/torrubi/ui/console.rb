@@ -62,7 +62,7 @@ module Torrubi
     class ConsoleMessenger
     
       def write(text)
-        puts text
+        printf text
       end
       
       def read
